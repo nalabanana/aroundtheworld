@@ -1,0 +1,12 @@
+Plane
+Train
+Ferry
+Cruise Ship
+Coach
+Underground Metro
+Rental Car
+Cycling
+Walking Tour
+Camel
+Hot Air Balloon
+Helicopter

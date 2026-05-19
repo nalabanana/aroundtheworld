@@ -8,13 +8,13 @@
 </head>
 <body>
   <header class="hero">
-    <h1>KES2 Holidays</h1>
+    <h1>🌍 KES2 Holidays ✈️</h1>
     <p>Package holidays you can trust</p>
   </header>
 
   <main class="container">
-    <section class="card">
-      <h2>Pupil Portal</h2>
+    <section class="card main-card">
+      <h2>Traveller Portal 🧳</h2>
       <div class="tabs">
         <button class="tab-btn active" data-tab="new">New Customer (Lesson 1)</button>
         <button class="tab-btn" data-tab="return">Returning Customer</button>
@@ -27,7 +27,6 @@
         <p class="helper">Choose exactly 5 transport modes. Use at least 3 different types. No option more than twice.</p>
         <div id="transportOptions" class="transport-grid"></div>
         <div id="selectedTransport" class="chips"></div>
-        <button id="generateCodeBtn">Generate Travel Code</button>
         <p id="newCodeOutput" class="code"></p>
       </div>
 
@@ -38,12 +37,12 @@
       </div>
 
       <div class="actions">
-        <button id="revealBtn">Reveal Next Destination</button>
+        <button id="revealBtn">Reveal Next Destination 🌴</button>
       </div>
       <p id="statusMsg" class="status"></p>
 
       <div id="loader" class="loader hidden">
-        <p>Searching worldwide deals...</p>
+        <p>🔎 Searching worldwide deals...</p>
         <div class="progress-wrap"><div id="progressBar" class="progress"></div></div>
         <p id="progressText">0%</p>
       </div>
@@ -51,16 +50,21 @@
       <div id="result" class="result hidden"></div>
     </section>
 
-    <section class="card">
-      <h2>Teacher Login</h2>
-      <label>Password
-        <input id="teacherPassword" type="password" placeholder="Teacher password" />
-      </label>
-      <label>Original travel code
-        <input id="teacherCode" type="text" placeholder="KES2-XXXXXX" />
-      </label>
-      <button id="teacherViewBtn">View Full Itinerary</button>
-      <div id="teacherResult" class="result hidden"></div>
+    <section class="teacher-panel-wrap">
+      <details class="teacher-panel">
+        <summary>Staff tools</summary>
+        <div class="teacher-content">
+          <h3>Teacher itinerary lookup</h3>
+          <label>Password
+            <input id="teacherPassword" type="password" placeholder="Teacher password" />
+          </label>
+          <label>Original travel code
+            <input id="teacherCode" type="text" placeholder="KES2-XXXXXX" />
+          </label>
+          <button id="teacherViewBtn">View Full Itinerary</button>
+          <div id="teacherResult" class="result hidden"></div>
+        </div>
+      </details>
     </section>
   </main>
 

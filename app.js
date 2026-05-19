@@ -6,10 +6,9 @@ const DESTINATIONS = [
   ["Lisbon, Portugal",-9.1],["Reykjavik, Iceland",-21.9],["Dublin, Ireland",-6.26],["Amsterdam, Netherlands",4.9],["Berlin, Germany",13.4],["Prague, Czechia",14.4],["Vienna, Austria",16.4],["Istanbul, Türkiye",28.9],["Doha, Qatar",51.5],["Tokyo, Japan",139.7]
 ];
 
-const DEFAULT_TRANSPORT = ["Plane","Train","Ferry","Cruise Ship","Coach","Underground Metro","Rental Car","Cycling","Walking Tour","Camel","Hot Air Balloon","Helicopter"]
 const DEFAULT_LIFEEVENTS = ["Flight delay due to storms","Lost luggage at transfer airport","Hotel overbooked on arrival","Passport queue causes missed connection","Rail strike affects local travel","Unexpected festival crowds in city centre","Food poisoning from street food","Broken leg during excursion","Local taxi strike","Hurricane warning changes plans","Heatwave causes attraction closures","Museum closed for emergency maintenance","Phone lost while sightseeing","Travel card payment declined temporarily","Minor language misunderstanding with guide","Unexpected visa paperwork issue","Seasickness on ferry crossing"]
 
-let transportOptions = [], lifeEvents = [], selectedTransport = [];
+let lifeEvents = [];
 
 const $ = id => document.getElementById(id);
 
@@ -65,32 +64,6 @@ function nextCode(original, lesson){
   return `${original}-${lessonToken(nextLesson)}`;
 }
 
-function renderTransport(){
-  const wrap = $("transportOptions");
-  wrap.innerHTML = "";
-  transportOptions.forEach(opt=>{
-    const div = document.createElement("div");
-    div.className = "transport-option";
-    div.textContent = opt;
-    div.onclick = () => {
-      if(selectedTransport.length >= 5) return;
-      const count = selectedTransport.filter(x=>x===opt).length;
-      if(count >= 2) return;
-      selectedTransport.push(opt);
-      showSelected();
-    };
-    wrap.appendChild(div);
-  });
-}
-function showSelected(){
-  $("selectedTransport").innerHTML = selectedTransport.map((x,i)=>`<span class='chip'>${x} <a href='#' data-i='${i}'>✕</a></span>`).join("");
-  $("selectedTransport").querySelectorAll("a").forEach(a=>a.onclick=(e)=>{e.preventDefault();selectedTransport.splice(Number(a.dataset.i),1);showSelected();});
-}
-function validTransportSelection(){
-  const unique = new Set(selectedTransport);
-  return selectedTransport.length===5 && unique.size>=3;
-}
-
 function generateOriginalCode(name){
   const day = new Date().toISOString().slice(0,10);
   const key = `kes2_lastgen_${name.toLowerCase()}`;
@@ -124,12 +97,11 @@ async function revealFlow(original, lesson){
   const index = lesson-1;
   const city = route[index];
   const rng = mulberry32(hashCode(original+lesson));
-  const mode = pick(profile.transport, rng);
   const event = rng()<0.7 ? pick(lifeEvents, rng) : "No complication this week — smooth travelling!";
 
   const history = route.slice(0, lesson).map((c, i) => `<li>Lesson ${i+1}: <strong>${c}</strong></li>`).join("");
   const next = nextCode(original, lesson);
-  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Travel mode: <strong>${mode}</strong> 🚍</p><p>Complication: ${event}</p><h4>Trip history</h4><ol>${history}</ol><p>Next lesson code: <strong id='nextCodeText'>${next}</strong></p><button id='copyCodeBtn' type='button'>Copy next code 📋</button>`;
+  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Complication: ${event}</p><h4>Trip history</h4><ol>${history}</ol><p>Next lesson code: <strong id='nextCodeText'>${next}</strong></p><button id='copyCodeBtn' type='button'>Copy next code 📋</button>`;
   $("result").innerHTML = out;
   $("result").classList.remove("hidden");
   const copyBtn = $("copyCodeBtn");
@@ -155,13 +127,11 @@ $("revealBtn").onclick = () => {
   if (newTabActive) {
     const name = $("firstName").value.trim();
     if(!name) return $("statusMsg").textContent="Please enter your first name.";
-    if(!validTransportSelection()) return $("statusMsg").textContent="Transport rules not met. Pick 5 modes with at least 3 different choices.";
-
     let existingCode = $("newCodeOutput").textContent.match(/KES2-[A-Z0-9]{6}/)?.[0];
     if (!existingCode) {
       const code = generateOriginalCode(name);
       if(!code) return $("statusMsg").textContent="Travel code already generated today for this name.";
-      localStorage.setItem(`kes2_profile_${code}`, JSON.stringify({name, transport:selectedTransport}));
+      localStorage.setItem(`kes2_profile_${code}`, JSON.stringify({name}));
       $("newCodeOutput").textContent = `Next lesson code: ${nextCode(code, 1)}`;
       existingCode = code;
     }
@@ -186,10 +156,5 @@ $("teacherViewBtn").onclick = () => {
 };
 
 (async function init(){
-  transportOptions = await loadTextLines("transport.txt", DEFAULT_TRANSPORT);
   lifeEvents = await loadTextLines("lifeevents.txt", DEFAULT_LIFEEVENTS);
-  renderTransport();
-  if (!transportOptions.length) {
-    $("statusMsg").textContent = "Unable to load transport options.";
-  }
 })();

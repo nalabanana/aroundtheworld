@@ -75,20 +75,6 @@ button:hover { filter: brightness(1.05); }
 .tab { display: none; }
 .tab.active { display: block; }
 
-.transport-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 8px; margin: 8px 0; }
-.transport-option {
-  background: #f4f8ff;
-  border: 1px solid #c9daef;
-  padding: 8px;
-  border-radius: 9px;
-  text-align: center;
-  cursor: pointer;
-  font-weight: 600;
-}
-.transport-option:hover { border-color: var(--jet2-blue); }
-
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-.chip { background: #e8f1ff; padding: 4px 8px; border-radius: 999px; font-size: .9rem; }
 .loader { margin: 16px 0; background: #f7faff; border: 1px solid #d5e5f9; border-radius: 8px; padding: 12px; }
 .progress-wrap { width: 100%; background: #e5eef8; height: 16px; border-radius: 8px; overflow: hidden; }
 .progress { width: 0; height: 100%; background: linear-gradient(90deg, var(--jet2-red), #ff6a6f); }
@@ -97,7 +83,6 @@ button:hover { filter: brightness(1.05); }
 .code { font-weight: 700; color: var(--jet2-blue); background:#eef5ff; padding:8px 10px; border-radius:8px; }
 .result { margin-top: 16px; background: #f6fbff; border-left: 4px solid var(--jet2-blue); padding: 12px; border-radius: 8px; }
 .status { color: #b0122b; font-weight: 600; min-height: 1.2em; }
-.helper { font-size: .92rem; color:#3f4d62; }
 
 .teacher-panel-wrap { align-self: start; }
 .teacher-panel summary {

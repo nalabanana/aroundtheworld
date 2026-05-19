@@ -48,12 +48,22 @@ function itineraryFromOriginal(originalCode){
   return picks;
 }
 
+const LESSON_TOKENS = ["SKY9", "WAVE4", "TREK8", "GLOBE2", "NOVA7"];
+
 function parseCode(code){
-  const m = code.trim().toUpperCase().match(/^KES2-([A-Z0-9]{6})(?:-L([1-5]))?$/);
+  const m = code.trim().toUpperCase().match(/^KES2-([A-Z0-9]{6})(?:-([A-Z0-9]{4,8}))?$/);
   if(!m) return null;
-  return { original:`KES2-${m[1]}`, lesson:m[2]?Number(m[2]):1 };
+  const original = `KES2-${m[1]}`;
+  if(!m[2]) return { original, lesson:1 };
+  const lesson = LESSON_TOKENS.indexOf(m[2]) + 1;
+  if(lesson < 1) return null;
+  return { original, lesson };
 }
-function nextCode(original, lesson){ return `${original}-L${Math.min(lesson+1,5)}`; }
+function lessonToken(lesson){ return LESSON_TOKENS[Math.max(0, Math.min(lesson-1, LESSON_TOKENS.length-1))]; }
+function nextCode(original, lesson){
+  const nextLesson = Math.min(lesson+1,5);
+  return `${original}-${lessonToken(nextLesson)}`;
+}
 
 function renderTransport(){
   const wrap = $("transportOptions");
@@ -117,9 +127,20 @@ async function revealFlow(original, lesson){
   const mode = pick(profile.transport, rng);
   const event = rng()<0.7 ? pick(lifeEvents, rng) : "No complication this week — smooth travelling!";
 
-  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Travel mode: <strong>${mode}</strong> 🚍</p><p>Complication: ${event}</p><p>Next lesson code: <strong>${nextCode(original, lesson)}</strong></p>`;
+  const history = route.slice(0, lesson).map((c, i) => `<li>Lesson ${i+1}: <strong>${c}</strong></li>`).join("");
+  const next = nextCode(original, lesson);
+  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Travel mode: <strong>${mode}</strong> 🚍</p><p>Complication: ${event}</p><h4>Trip history</h4><ol>${history}</ol><p>Next lesson code: <strong id='nextCodeText'>${next}</strong></p><button id='copyCodeBtn' type='button'>Copy next code 📋</button>`;
   $("result").innerHTML = out;
   $("result").classList.remove("hidden");
+  const copyBtn = $("copyCodeBtn");
+  copyBtn.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(next);
+      copyBtn.textContent = "Copied ✅";
+    } catch (_err) {
+      copyBtn.textContent = "Copy failed";
+    }
+  };
 }
 
 document.querySelectorAll(".tab-btn").forEach(btn=>btn.onclick=()=>{
@@ -141,7 +162,7 @@ $("revealBtn").onclick = () => {
       const code = generateOriginalCode(name);
       if(!code) return $("statusMsg").textContent="Travel code already generated today for this name.";
       localStorage.setItem(`kes2_profile_${code}`, JSON.stringify({name, transport:selectedTransport}));
-      $("newCodeOutput").textContent = `🧾 Your original code: ${code}. Use ${code}-L1 this lesson.`;
+      $("newCodeOutput").textContent = `Next lesson code: ${nextCode(code, 1)}`;
       existingCode = code;
     }
 

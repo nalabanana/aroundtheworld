@@ -22,7 +22,12 @@ body {
   color: #fff;
   border-bottom: 6px solid var(--jet2-red);
 }
-.hero h1 { margin: 0; font-size: 2rem; letter-spacing: .4px; }
+.hero .brand-logo {
+  width: min(560px, 92%);
+  height: auto;
+  display: block;
+  margin: 0 auto 6px;
+}
 .hero p { margin: 8px 0 0; font-style: italic; opacity: .95; }
 
 .container {

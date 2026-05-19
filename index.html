@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KES2 Holidays - Around the World</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <img class="brand-logo" src="logo.png" alt="KES2 Holidays logo" />
+    <p>Package holidays you can trust</p>
+  </header>
+
+  <main class="container">
+    <section class="card main-card">
+      <h2>Traveller Portal 🧳</h2>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="new">New Customer (Lesson 1)</button>
+        <button class="tab-btn" data-tab="return">Returning Customer</button>
+      </div>
+
+      <div id="new" class="tab active">
+        <label>First name
+          <input id="firstName" type="text" maxlength="30" placeholder="e.g. Aisha" />
+        </label>
+        <p id="newCodeOutput" class="code"></p>
+      </div>
+
+      <div id="return" class="tab">
+        <label>Enter travel code
+          <input id="travelCodeInput" type="text" placeholder="KES2-XXXXXX-SKY9" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="revealBtn">Reveal Next Destination 🌴</button>
+      </div>
+      <p id="statusMsg" class="status"></p>
+
+      <div id="loader" class="loader hidden">
+        <p>🔎 Searching worldwide deals...</p>
+        <div class="progress-wrap"><div id="progressBar" class="progress"></div></div>
+        <p id="progressText">0%</p>
+      </div>
+
+      <div id="result" class="result hidden"></div>
+    </section>
+
+    <section class="teacher-panel-wrap">
+      <details class="teacher-panel">
+        <summary>Staff tools</summary>
+        <div class="teacher-content">
+          <h3>Teacher itinerary lookup</h3>
+          <label>Password
+            <input id="teacherPassword" type="password" placeholder="Teacher password" />
+          </label>
+          <label>Original travel code
+            <input id="teacherCode" type="text" placeholder="KES2-XXXXXX" />
+          </label>
+          <button id="teacherViewBtn">View Full Itinerary</button>
+          <div id="teacherResult" class="result hidden"></div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

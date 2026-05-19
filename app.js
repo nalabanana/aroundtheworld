@@ -101,7 +101,7 @@ async function revealFlow(original, lesson){
 
   const history = route.slice(0, lesson).map((c, i) => `<li>Lesson ${i+1}: <strong>${c}</strong></li>`).join("");
   const next = nextCode(original, lesson);
-  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Complication: ${event}</p><h4>Trip history</h4><ol>${history}</ol><p>Next lesson code: <strong id='nextCodeText'>${next}</strong></p><button id='copyCodeBtn' type='button'>Copy next code 📋</button>`;
+  const out = `<h3>Lesson ${lesson} Destination 🌍</h3><p><strong>${city}</strong></p><p>Complication: ${event}</p><h4>Trip history</h4><ol>${history}</ol><p>Next lesson travel code: <strong id='nextCodeText'>${next}</strong></p><button id='copyCodeBtn' type='button'>Copy next code 📋</button>`;
   $("result").innerHTML = out;
   $("result").classList.remove("hidden");
   const copyBtn = $("copyCodeBtn");
@@ -132,7 +132,7 @@ $("revealBtn").onclick = () => {
       const code = generateOriginalCode(name);
       if(!code) return $("statusMsg").textContent="Travel code already generated today for this name.";
       localStorage.setItem(`kes2_profile_${code}`, JSON.stringify({name}));
-      $("newCodeOutput").textContent = `Next lesson code: ${nextCode(code, 1)}`;
+      $("newCodeOutput").textContent = `Next lesson travel code: ${nextCode(code, 1)}`;
       existingCode = code;
     }
 

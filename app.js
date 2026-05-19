@@ -6,23 +6,13 @@ const DESTINATIONS = [
   ["Lisbon, Portugal",-9.1],["Reykjavik, Iceland",-21.9],["Dublin, Ireland",-6.26],["Amsterdam, Netherlands",4.9],["Berlin, Germany",13.4],["Prague, Czechia",14.4],["Vienna, Austria",16.4],["Istanbul, Türkiye",28.9],["Doha, Qatar",51.5],["Tokyo, Japan",139.7]
 ];
 
-const DEFAULT_TRANSPORT = ["Plane","Train","Ferry","Cruise Ship","Coach","Underground Metro","Rental Car","Cycling","Walking Tour","Camel","Hot Air Balloon","Helicopter"]
-const DEFAULT_LIFEEVENTS = ["Flight delay due to storms","Lost luggage at transfer airport","Hotel overbooked on arrival","Passport queue causes missed connection","Rail strike affects local travel","Unexpected festival crowds in city centre","Food poisoning from street food","Broken leg during excursion","Local taxi strike","Hurricane warning changes plans","Heatwave causes attraction closures","Museum closed for emergency maintenance","Phone lost while sightseeing","Travel card payment declined temporarily","Minor language misunderstanding with guide","Unexpected visa paperwork issue","Seasickness on ferry crossing"]
-
 let transportOptions = [], lifeEvents = [], selectedTransport = [];
 
 const $ = id => document.getElementById(id);
 
-async function loadTextLines(path, fallback) {
-  try {
-    const response = await fetch(path);
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const text = await response.text();
-    const lines = text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
-    return lines.length ? lines : fallback;
-  } catch (_err) {
-    return fallback;
-  }
+async function loadTextLines(path) {
+  const text = await fetch(path).then(r => r.text());
+  return text.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
 }
 function hashCode(str){ let h=2166136261; for(const c of str){ h^=c.charCodeAt(0); h=Math.imul(h,16777619);} return h>>>0; }
 function mulberry32(a){ return function(){ let t=a+=0x6D2B79F5; t=Math.imul(t^t>>>15,t|1); t^=t+Math.imul(t^t>>>7,t|61); return ((t^t>>>14)>>>0)/4294967296; }; }
@@ -157,10 +147,7 @@ $("teacherViewBtn").onclick = () => {
 };
 
 (async function init(){
-  transportOptions = await loadTextLines("transport.txt", DEFAULT_TRANSPORT);
-  lifeEvents = await loadTextLines("lifeevents.txt", DEFAULT_LIFEEVENTS);
+  transportOptions = await loadTextLines("transport.txt");
+  lifeEvents = await loadTextLines("lifeevents.txt");
   renderTransport();
-  if (!transportOptions.length) {
-    $("statusMsg").textContent = "Unable to load transport options.";
-  }
 })();

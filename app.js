@@ -6,8 +6,15 @@ const DESTINATIONS = [
   ["Lisbon, Portugal",-9.1],["Reykjavik, Iceland",-21.9],["Dublin, Ireland",-6.26],["Amsterdam, Netherlands",4.9],["Berlin, Germany",13.4],["Prague, Czechia",14.4],["Vienna, Austria",16.4],["Istanbul, Türkiye",28.9],["Doha, Qatar",51.5],["Tokyo, Japan",139.7]
 ];
 
-const DEFAULT_LIFEEVENTS = ["Flight delay due to storms","Lost luggage at transfer airport","Hotel overbooked on arrival","Passport queue causes missed connection","Rail strike affects local travel","Unexpected festival crowds in city centre","Food poisoning from street food","Broken leg during excursion","Local taxi strike","Hurricane warning changes plans","Heatwave causes attraction closures","Museum closed for emergency maintenance","Phone lost while sightseeing","Travel card payment declined temporarily","Minor language misunderstanding with guide","Unexpected visa paperwork issue","Seasickness on ferry crossing"]
-
+const DEFAULT_LIFEEVENTS = ["Lost luggage. -£400 to buy new clothes", "Hotel overbooked on arrival. -£200 to book somewhere else", "Rail strike affects local travel. Choose a different city in the same country to go to", "Broken leg. Activities must be wheelchair friendly", "Heatwave. Activities must all be indoors", "Phone lost. -£500 for a new phone", "Travel card payment declined. Find a free activity to do", "No complication. Yay"]
+Lost luggage. -£400 to buy new clothes
+Hotel overbooked on arrival. -£200 to book somewhere else
+Rail strike affects local travel. Choose a different city in the same country to go to
+Broken leg. Activities must be wheelchair friendly
+Heatwave. Activities must all be indoors
+Phone lost. -£500 for a new phone
+Travel card payment declined. Find a free activity to do
+No complication. Yay
 let lifeEvents = [];
 
 const $ = id => document.getElementById(id);

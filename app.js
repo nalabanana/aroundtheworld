@@ -6,15 +6,8 @@ const DESTINATIONS = [
   ["Lisbon, Portugal",-9.1],["Reykjavik, Iceland",-21.9],["Dublin, Ireland",-6.26],["Amsterdam, Netherlands",4.9],["Berlin, Germany",13.4],["Prague, Czechia",14.4],["Vienna, Austria",16.4],["Istanbul, Türkiye",28.9],["Doha, Qatar",51.5],["Tokyo, Japan",139.7]
 ];
 
-const DEFAULT_LIFEEVENTS = ["Lost luggage. -£400 to buy new clothes", "Hotel overbooked on arrival. -£200 to book somewhere else", "Rail strike affects local travel. Choose a different city in the same country to go to", "Broken leg. Activities must be wheelchair friendly", "Heatwave. Activities must all be indoors", "Phone lost. -£500 for a new phone", "Travel card payment declined. Find a free activity to do", "No complication. Yay"]
-Lost luggage. -£400 to buy new clothes
-Hotel overbooked on arrival. -£200 to book somewhere else
-Rail strike affects local travel. Choose a different city in the same country to go to
-Broken leg. Activities must be wheelchair friendly
-Heatwave. Activities must all be indoors
-Phone lost. -£500 for a new phone
-Travel card payment declined. Find a free activity to do
-No complication. Yay
+const DEFAULT_LIFEEVENTS = ["Flight delay due to storms","Lost luggage at transfer airport","Hotel overbooked on arrival","Passport queue causes missed connection","Rail strike affects local travel","Unexpected festival crowds in city centre","Food poisoning from street food","Broken leg during excursion","Local taxi strike","Hurricane warning changes plans","Heatwave causes attraction closures","Museum closed for emergency maintenance","Phone lost while sightseeing","Travel card payment declined temporarily","Minor language misunderstanding with guide","Unexpected visa paperwork issue","Seasickness on ferry crossing"]
+
 let lifeEvents = [];
 
 const $ = id => document.getElementById(id);
@@ -78,18 +71,21 @@ function nextCode(original, lesson){
 
 function generateOriginalCode(name){
   const day = new Date().toISOString().slice(0,10);
-  const key = `kes2_lastgen_${name.toLowerCase()}`;
-  const last = localStorage.getItem(key);
-  if(last === day) return null;
+  const safeName = name.toLowerCase();
+  const dateKey = `kes2_lastgen_${safeName}`;
+  const codeKey = `kes2_lastcode_${safeName}`;
+  const last = localStorage.getItem(dateKey);
+  const savedCode = localStorage.getItem(codeKey);
+  if(last === day && savedCode) return savedCode;
   const token = (hashCode(name + day).toString(36).toUpperCase() + "XXXXXX").slice(0,6);
-  localStorage.setItem(key, day);
-  return `KES2-${token}`;
+  const code = `KES2-${token}`;
+  localStorage.setItem(dateKey, day);
+  localStorage.setItem(codeKey, code);
+  return code;
 }
 
 function pick(arr,rng){ return arr[Math.floor(rng()*arr.length)]; }
 async function revealFlow(original, lesson){
-  const profile = JSON.parse(localStorage.getItem(`kes2_profile_${original}`) || "null");
-  if(!profile){ $("statusMsg").textContent = "No saved profile for this code on this device. For lesson 1, please register as a new customer first."; return; }
   $("statusMsg").textContent = "";
   $("result").classList.add("hidden");
   $("loader").classList.remove("hidden");
@@ -139,10 +135,10 @@ $("revealBtn").onclick = () => {
   if (newTabActive) {
     const name = $("firstName").value.trim();
     if(!name) return $("statusMsg").textContent="Please enter your first name.";
-    let existingCode = $("newCodeOutput").textContent.match(/KES2-[A-Z0-9]{6}/)?.[0];
+    const codeMatch = $("newCodeOutput").textContent.match(/KES2-[A-Z0-9]{6}/);
+    let existingCode = codeMatch ? codeMatch[0] : null;
     if (!existingCode) {
       const code = generateOriginalCode(name);
-      if(!code) return $("statusMsg").textContent="Travel code already generated today for this name.";
       localStorage.setItem(`kes2_profile_${code}`, JSON.stringify({name}));
       $("newCodeOutput").textContent = `Next lesson code: ${nextCode(code, 1)}`;
       existingCode = code;

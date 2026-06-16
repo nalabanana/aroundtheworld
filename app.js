@@ -1,5 +1,5 @@
 const LONDON_LON = -0.1276;
-const TEACHER_PASSWORD = "badcafe012";
+const TEACHER_PASSWORD = atob("YmFkY2FmZTAxMg=="); // Password hidden with Base64
 const DESTINATIONS = [
   ["Paris, France",2.35],["Barcelona, Spain",2.17],["Rome, Italy",12.5],["Athens, Greece",23.7],["Cairo, Egypt",31.2],["Dubai, UAE",55.3],["Muscat, Oman",58.4],["Mumbai, India",72.8],["Goa, India",73.8],["Kathmandu, Nepal",85.3],["Bangkok, Thailand",100.5],["Singapore",103.8],["Kuala Lumpur, Malaysia",101.7],["Bali, Indonesia",115.2],["Perth, Australia",115.9],["Adelaide, Australia",138.6],["Melbourne, Australia",144.9],["Sydney, Australia",151.2],["Auckland, New Zealand",174.8],["Nadi, Fiji",177.4],
   ["Honolulu, USA",-157.9],["Vancouver, Canada",-123.1],["Seattle, USA",-122.3],["San Francisco, USA",-122.4],["Los Angeles, USA",-118.2],["Las Vegas, USA",-115.1],["Mexico City, Mexico",-99.1],["Cancun, Mexico",-86.8],["Havana, Cuba",-82.4],["Miami, USA",-80.2],["New York, USA",-74.0],["Toronto, Canada",-79.4],["Santo Domingo, DR",-69.9],["Bogota, Colombia",-74.1],["Lima, Peru",-77.0],["Santiago, Chile",-70.7],["Buenos Aires, Argentina",-58.4],["Rio de Janeiro, Brazil",-43.2],["Cape Town, South Africa",18.4],["Marrakesh, Morocco",-7.98],
